@@ -7,7 +7,7 @@ collection = client.get_or_create_collection(
     name="abstracts", metadata={"hnsw:space": "cosine"}
 )
 
-if collection.count() == 0:
+if __name__ == "__main__":
     with open("abstracts.json", "r") as f:
         data = json.load(f)
         abstracts = [d["title"] + "\n\n" + d["abstract"] for d in data]
@@ -18,6 +18,7 @@ if collection.count() == 0:
                 "year": d["year"],
                 "finalist_names": json.dumps(d["finalist_names"]),
                 "awards_won": json.dumps(d["awards_won"]),
+                "won_anything": False if len(d["awards_won"]) == 0 else True,
             }
             for d in data
         ]
@@ -27,14 +28,3 @@ if collection.count() == 0:
             metadatas=absttract_metadata,
             ids=ids,
         )
-
-results = collection.query(
-    query_texts=[
-        "drug discovery to optimize the bottleneck when a drug enters the bloodstream among different races of people"
-    ],
-    n_results=5,
-    # where={"metadata_field": "is_equal_to_this"},
-    # where_document={"$contains": "search_string"},
-)
-
-print(results)

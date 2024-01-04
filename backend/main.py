@@ -1,3 +1,4 @@
+import json
 import chromadb
 
 client = chromadb.PersistentClient(path="./chromadb.db")
@@ -17,4 +18,10 @@ def query(query_test, n_results=5, metadata={}):
     )
 
 
-print(query("testing"))
+results = query(
+    "a novel and pragmatic approach to innevating the real-time and scalable analysis of big data",
+    n_results=10,
+    # metadata={"won_anything": True},
+)
+
+print(json.dumps(results, indent=4))
